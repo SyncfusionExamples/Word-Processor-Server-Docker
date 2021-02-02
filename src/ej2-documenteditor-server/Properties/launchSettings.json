@@ -1,0 +1,43 @@
+{
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:62869/",
+      "sslPort": 0
+    }
+  },
+  "profiles": {
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "launchUrl": "api/test",
+      "environmentVariables": {
+        "SYNCFUSION_LICENSE_KEY": "<License_Key_Development>",
+        "SPELLCHECK_Dictionary_Path": "",
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    "EJ2APIServices": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "api/test",
+      "environmentVariables": {
+        "SYNCFUSION_LICENSE_KEY": "<License_Key_Development>",
+        "SPELLCHECK_Dictionary_Path": "",
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "http://localhost:62870/"
+    },
+    "Docker": {
+      "commandName": "Docker",
+      "launchBrowser": true,
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/api/test",
+      "environmentVariables": {
+        "SYNCFUSION_LICENSE_KEY": "<License_Key_Development>",
+        "SPELLCHECK_Dictionary_Path": "",
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
