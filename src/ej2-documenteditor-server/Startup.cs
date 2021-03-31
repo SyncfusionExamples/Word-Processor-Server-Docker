@@ -17,12 +17,16 @@ using Microsoft.OData.UriParser;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using EJ2DocumentEditorServer.Controllers;
 using Syncfusion.EJ2.SpellChecker;
+using System.IO;
+using Newtonsoft.Json;
 
 namespace EJ2DocumentEditorServer
 {
     public class Startup
     {
-        internal static List<SpellCheckDictionary> spellDictCollection;
+        internal static List<DictionaryData> spellDictCollection;
+        internal static string path;
+        internal static string personalDictPath;
         public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -32,20 +36,24 @@ namespace EJ2DocumentEditorServer
                 .AddEnvironmentVariables();
 
             Configuration = builder.Build();
-            string path = Configuration["SPELLCHECK_DICTIONARY_PATH"];
-            if(path !=string.Empty)
+            path = Configuration["SPELLCHECK_DICTIONARY_PATH"];
+            string jsonFileName = Configuration["SPELLCHECK_JSON_FILENAME"];
+            //check the spell check dictionary path environment variable value and assign default data folder
+            //if it is null.
+            path = string.IsNullOrEmpty(path) ? Path.Combine(env.ContentRootPath, "Data") : Path.Combine(env.ContentRootPath, path);
+            //Set the default spellcheck.json file if the json filename is empty.
+            jsonFileName = string.IsNullOrEmpty(jsonFileName) ? Path.Combine(path, "spellcheck.json") : Path.Combine(path, jsonFileName) ;
+            if (System.IO.File.Exists(jsonFileName))
             {
-            string dictionaryPath = path+"/en_US.dic";
-            string affixPath = path + "/en_US.aff";
-            string customDict = path + "/customDict.dic";
-            List<DictionaryData> items = new List<DictionaryData>() {
-               new DictionaryData(1046,dictionaryPath,affixPath,customDict),
-            };
-            spellDictCollection = new List<SpellCheckDictionary>();
-            foreach (var item in items)
-            {
-                spellDictCollection.Add(new SpellCheckDictionary(new DictionaryData(1046, dictionaryPath, affixPath, customDict)));
-            }
+                string jsonImport = System.IO.File.ReadAllText(jsonFileName);
+                List<DictionaryData> spellChecks = JsonConvert.DeserializeObject<List<DictionaryData>>(jsonImport);
+                spellDictCollection = new List<DictionaryData>();
+                //construct the dictionary file path using customer provided path and dictionary name
+                foreach (var spellCheck in spellChecks)
+                {
+                    spellDictCollection.Add(new DictionaryData(spellCheck.LanguadeID, Path.Combine(path, spellCheck.DictionaryPath), Path.Combine(path, spellCheck.AffixPath)));
+                    personalDictPath = Path.Combine(path, spellCheck.PersonalDictPath);
+                }
             }
         }
 

@@ -21,11 +21,15 @@ namespace EJ2DocumentEditorServer.Controllers
     public class DocumentEditorController : Controller
     {
         private readonly IHostingEnvironment _hostingEnvironment;
-        List<SpellCheckDictionary> spellDictionary;
+        List<DictionaryData> spellDictionary;
+        string personalDictPath;
+        string path;
         public DocumentEditorController(IHostingEnvironment hostingEnvironment)
         {
             _hostingEnvironment = hostingEnvironment;            
             spellDictionary = Startup.spellDictCollection;
+            path = Startup.path;
+            personalDictPath = Startup.personalDictPath;
         }
 
         [AcceptVerbs("Post")]
@@ -58,7 +62,7 @@ namespace EJ2DocumentEditorServer.Controllers
         {
             try
             {
-                SpellChecker spellCheck = new SpellChecker(spellDictionary);
+                SpellChecker spellCheck = new SpellChecker(spellDictionary,personalDictPath);
                 spellCheck.GetSuggestions(spellChecker.LanguageID, spellChecker.TexttoCheck, spellChecker.CheckSpelling, spellChecker.CheckSuggestion, spellChecker.AddWord);
                 return Newtonsoft.Json.JsonConvert.SerializeObject(spellCheck);
             }
@@ -82,7 +86,7 @@ namespace EJ2DocumentEditorServer.Controllers
         {
             try
             {
-                SpellChecker spellCheck = new SpellChecker(spellDictionary);
+                SpellChecker spellCheck = new SpellChecker(spellDictionary,personalDictPath);
                 spellCheck.CheckSpelling(spellChecker.LanguageID, spellChecker.TexttoCheck);
                 return Newtonsoft.Json.JsonConvert.SerializeObject(spellCheck);
             }
@@ -137,6 +141,10 @@ namespace EJ2DocumentEditorServer.Controllers
             public string saltBase64 { get; set; }
             public int spinCount { get; set; }
         }
+        public class UploadDocument
+        {
+            public string DocumentName { get; set; }
+        }
         [AcceptVerbs("Post")]
         [HttpPost]
         [EnableCors("AllowAllOrigins")]
@@ -163,7 +171,47 @@ namespace EJ2DocumentEditorServer.Controllers
             document.Dispose();
             return json;
         }
-
+        [HttpPost]
+        [EnableCors("AllowAllOrigins")]
+        [Route("LoadDocument")]
+        public string LoadDocument([FromForm] UploadDocument uploadDocument)
+        {
+            string documentPath= Path.Combine(path, uploadDocument.DocumentName);
+            Stream stream = null;
+            if (System.IO.File.Exists(documentPath))
+            {
+                byte[] bytes = System.IO.File.ReadAllBytes(documentPath);
+                stream = new MemoryStream(bytes);
+            }
+            else
+            {
+                bool result = Uri.TryCreate(uploadDocument.DocumentName, UriKind.Absolute, out Uri uriResult)
+                    && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
+                if (result)
+                {
+                    stream = GetDocumentFromURL(uploadDocument.DocumentName).Result;
+                    if (stream != null)
+                        stream.Position = 0;
+                }
+            }
+            WordDocument document = WordDocument.Load(stream, FormatType.Docx);
+            string json = Newtonsoft.Json.JsonConvert.SerializeObject(document);
+            document.Dispose();
+            return json;
+        }
+        async Task<MemoryStream> GetDocumentFromURL(string url)
+        {
+            var client = new HttpClient(); ;
+            var response = await client.GetAsync(url);
+            var rawStream = await response.Content.ReadAsStreamAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                MemoryStream docStream = new MemoryStream();
+                rawStream.CopyTo(docStream);
+                return docStream;
+            }
+            else { return null; }
+        }
         internal static FormatType GetFormatType(string format)
         {
             if (string.IsNullOrEmpty(format))
@@ -299,4 +347,5 @@ namespace EJ2DocumentEditorServer.Controllers
             return document;
         }
     }
+
 }
