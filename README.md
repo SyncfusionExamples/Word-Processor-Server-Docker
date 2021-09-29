@@ -2,7 +2,7 @@
  
 The [Syncfusion **Word Processor (also known as Document Editor)**](https://www.syncfusion.com/javascript-ui-controls/js-word-processor?utm_source=docker&utm_medium=listing&utm_campaign=javascript-word-processor-docker) is a component with editing capabilities like Microsoft Word. It is used to create, edit, view, and print Word documents. It provides all the common word processing abilities, including editing text; formatting contents; resizing images and tables; finding and replacing text; importing, exporting, and printing Word documents; and using bookmarks and tables of contents. 
  
-This Docker image is the predefined Docker container of Syncfusion’s Word Processor backend. You can deploy it quickly to your infrastructure.
+This Docker image is the predefined Docker container for Syncfusion’s Word Processor backend functionalities. You can deploy it quickly to your infrastructure.
 
 The Word Processor is supported in the [JavaScript](https://www.syncfusion.com/javascript-ui-controls?utm_source=docker&utm_medium=listing&utm_campaign=javascript-word-processor-docker), [Angular](https://www.syncfusion.com/angular-ui-components?utm_source=docker&utm_medium=listing&utm_campaign=javascript-word-processor-docker), [React](https://www.syncfusion.com/react-ui-components?utm_source=docker&utm_medium=listing&utm_campaign=javascript-word-processor-docker), [Vue](https://www.syncfusion.com/vue-ui-components?utm_source=docker&utm_medium=listing&utm_campaign=javascript-word-processor-docker), [ASP.NET Core](https://www.syncfusion.com/aspnet-core-ui-controls?utm_source=docker&utm_medium=listing&utm_campaign=javascript-word-processor-docker), [ASP.NET MVC](https://www.syncfusion.com/aspnet-mvc-ui-controls?utm_source=docker&utm_medium=listing&utm_campaign=javascript-word-processor-docker), and [Blazor](https://www.syncfusion.com/blazor-components?utm_source=docker&utm_medium=listing&utm_campaign=javascript-word-processor-docker) platforms.
 
@@ -150,7 +150,7 @@ The JSON file should contain the language-wise spell check dictionary configurat
 ]
 ```
 
-A JSON file is included in the default resource directory `/app/Data` of this Docker image with name `spellcheck.json`. You can add a different file with your own spell check dictionary configurations. If you customize it, then you must set the new file name to environment variable `SPELLCHECK_JSON_FILENAME` in Docker compose file like below,
+A JSON file is included in the default resource directory `/app/Data` of this Docker image with the name `spellcheck.json`. You can add a different file with your own spell check dictionary configurations. If you customize it, then you must set the new file name to environment variable `SPELLCHECK_JSON_FILENAME` in Docker compose file like below,
 ```yaml
 version: '3.4' 
 
