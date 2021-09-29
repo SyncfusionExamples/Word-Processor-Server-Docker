@@ -130,7 +130,7 @@ services:
 
 **Step 2:** In the `data` folder, include the dictionary files (.dic, .aff, personal dictionary) and JSON file.
 
-**Note:** For maintaining the custom words from `add to dictionary` option (personal dictionary), place an empty .dic file (e.g.,. customDict.dic file) in the `data` folder.
+**Note:** For maintaining the custom words for `add to dictionary` option (personal dictionary), place an empty .dic file (e.g.,. customDict.dic file) in the `data` folder.
 
 The JSON file should contain the language-wise spell check dictionary configuration in the following format.
 ```json
