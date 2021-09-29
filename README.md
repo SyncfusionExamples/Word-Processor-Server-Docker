@@ -2,7 +2,9 @@
  
 The [Syncfusion **Word Processor (also known as Document Editor)**](https://www.syncfusion.com/javascript-ui-controls/js-word-processor?utm_source=docker&utm_medium=listing&utm_campaign=javascript-word-processor-docker) is a component with editing capabilities like Microsoft Word. It is used to create, edit, view, and print Word documents. It provides all the common word processing abilities, including editing text; formatting contents; resizing images and tables; finding and replacing text; importing, exporting, and printing Word documents; and using bookmarks and tables of contents. 
  
-This Docker image is the predefined Docker container for Syncfusion’s Word Processor backend functionalities. You can deploy it quickly to your infrastructure.
+This Docker project is the predefined Docker container for Syncfusion’s Word Processor backend functionalities. This server-side Web API project is targeting ASP.NET Core 2.1.
+
+If you want to add new functionality or customize any existing functionalities, then create your own Docker file by referencing this Docker project.
 
 The Word Processor is supported in the [JavaScript](https://www.syncfusion.com/javascript-ui-controls?utm_source=docker&utm_medium=listing&utm_campaign=javascript-word-processor-docker), [Angular](https://www.syncfusion.com/angular-ui-components?utm_source=docker&utm_medium=listing&utm_campaign=javascript-word-processor-docker), [React](https://www.syncfusion.com/react-ui-components?utm_source=docker&utm_medium=listing&utm_campaign=javascript-word-processor-docker), [Vue](https://www.syncfusion.com/vue-ui-components?utm_source=docker&utm_medium=listing&utm_campaign=javascript-word-processor-docker), [ASP.NET Core](https://www.syncfusion.com/aspnet-core-ui-controls?utm_source=docker&utm_medium=listing&utm_campaign=javascript-word-processor-docker), [ASP.NET MVC](https://www.syncfusion.com/aspnet-mvc-ui-controls?utm_source=docker&utm_medium=listing&utm_campaign=javascript-word-processor-docker), and [Blazor](https://www.syncfusion.com/blazor-components?utm_source=docker&utm_medium=listing&utm_campaign=javascript-word-processor-docker) platforms.
 
