@@ -113,8 +113,9 @@ The local directory `./data` means the directory `data` present in the same pare
 
 ![The directory containing the 'docker-compose.yml' file and 'data' folder](https://github.com/SyncfusionExamples/Word-Processor-Server-Docker/blob/master/docker-compose-file-directory.png)
 
-Few resource files are included in the default resource directory `/app/Data` of the Word Processor Docker container. You can find the default resource files that are included in this docker image from [GitHub](https://github.com/SyncfusionExamples/Word-Processor-Server-Docker/tree/master/src/ej2-documenteditor-server/Data). You can configure a different directory with your own resource files (required spell check dictionaries, and template documents) based on your needs. If you customize the default resource directory (change in casing, name or directory level), then you must set the modified directory path (assuming `/app/` as home directory) to environment variable `SPELLCHECK_DICTIONARY_PATH` like below.
+Few resource files are included in the default resource directory `/app/Data` of the Word Processor Docker container. You can find those default resource files from [GitHub](https://github.com/SyncfusionExamples/Word-Processor-Server-Docker/tree/master/src/ej2-documenteditor-server/Data). You can configure a new directory with your own resource files (required spell check dictionaries, and template documents) based on your needs.
 
+If you customize the default resource directory (change in casing, name or directory level), then you must set the modified directory path (assuming `/app/` as home directory) to environment variable `SPELLCHECK_DICTIONARY_PATH` like below.
 ```yaml
 version: '3.4' 
 services: 
@@ -152,7 +153,9 @@ The JSON file should contain the language-wise spell check dictionary configurat
 ]
 ```
 
-A JSON file is included in the default resource directory `/app/Data` of this Docker image with the name `spellcheck.json`. You can add a different file with your own spell check dictionary configurations. If you customize it, then you must set the new file name to environment variable `SPELLCHECK_JSON_FILENAME` in Docker compose file like below,
+A JSON file is included in the default resource directory `/app/Data` of this Docker image with the name `spellcheck.json`. You can add a new file with your own spell check dictionary configurations.
+
+If you customize it, then you must set the new file name to environment variable `SPELLCHECK_JSON_FILENAME` in Docker compose file like below,
 ```yaml
 version: '3.4' 
 
