@@ -21,7 +21,7 @@ Have [`Docker`](https://www.docker.com/products/container-runtime#/download) ins
 **Step 1:** Pull the word-processor-server image from Docker Hub.
 
 ```console
-docker pull word-processor-server
+docker pull syncfusion/word-processor-server
 ```
 
 **Step 2:** Create the docker-compose.yml file with the following code in your file system.
