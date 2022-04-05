@@ -1,10 +1,10 @@
-FROM microsoft/dotnet:2.1-aspnetcore-runtime AS base
+FROM mcr.microsoft.com/dotnet/aspnet:2.1 AS base
 WORKDIR /app
 EXPOSE 80
 ENV SYNCFUSION_LICENSE_KEY=""
 ENV SPELLCHECK_DICTIONARY_PATH=""
 ENV SPELLCHECK_JSON_FILENAME=""
-FROM microsoft/dotnet:2.1-sdk AS build
+FROM mcr.microsoft.com/dotnet/sdk:2.1 AS build
 
 WORKDIR /source
 COPY ["src/ej2-documenteditor-server/ej2-documenteditor-server.csproj", "./ej2-documenteditor-server/ej2-documenteditor-server.csproj"]
