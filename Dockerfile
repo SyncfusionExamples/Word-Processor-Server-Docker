@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/aspnet:2.1 AS base
+FROM --platform=linux/amd64 mcr.microsoft.com/dotnet/aspnet:2.1 AS base
 WORKDIR /app
 EXPOSE 80
 ARG SYNCFUSION_LICENSE_KEY
