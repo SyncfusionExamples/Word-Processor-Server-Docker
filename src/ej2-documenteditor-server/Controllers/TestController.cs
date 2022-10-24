@@ -13,7 +13,7 @@ namespace EJ2DocumentEditorServer.Controllers
         [HttpGet]
         public IEnumerable<string> Get()
         {
-            return new string[] { "value1", "value2" };
+            return new string[] { "value50", "value22" };
         }
 
         // GET api/values/5
