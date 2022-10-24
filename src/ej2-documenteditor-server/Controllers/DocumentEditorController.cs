@@ -75,7 +75,7 @@ namespace EJ2DocumentEditorServer.Controllers
         [HttpGet]
         public IEnumerable<string> Get()
         {
-            return new string[] { "value1", "value2" };
+            return new string[] { "value60", "value2" };
         }
 
         [AcceptVerbs("Post")]
@@ -271,7 +271,6 @@ namespace EJ2DocumentEditorServer.Controllers
 
         [AcceptVerbs("Post")]
         [HttpPost]
-        [EnableCors("AllowAllOrigins")]
         [Route("Export")]
         public FileStreamResult Export(IFormCollection data)
         {
@@ -345,6 +344,22 @@ namespace EJ2DocumentEditorServer.Controllers
             WDocument document = new WDocument(stream, WFormatType.Docx);
             stream.Dispose();
             return document;
+        }
+        [AcceptVerbs("Post")]
+        [HttpPost]
+        [Route("ExportSFDT")]
+        public void ExportSFDT([FromBody]SaveParameter data)
+        {
+            Stream document = WordDocument.Save(data.content, FormatType.Docx);
+            FileStream file = new FileStream("sampletest.docx", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+            document.CopyTo(file);
+            file.Close();
+            document.Close();
+        }
+
+        public class SaveParameter
+        {
+            public string content { get; set; }
         }
     }
 
