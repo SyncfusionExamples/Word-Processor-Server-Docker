@@ -21,15 +21,11 @@ namespace EJ2DocumentEditorServer.Controllers
     public class DocumentEditorController : Controller
     {
         private readonly IHostingEnvironment _hostingEnvironment;
-        List<DictionaryData> spellDictionary;
-        string personalDictPath;
         string path;
         public DocumentEditorController(IHostingEnvironment hostingEnvironment)
         {
-            _hostingEnvironment = hostingEnvironment;            
-            spellDictionary = Startup.spellDictCollection;
+            _hostingEnvironment = hostingEnvironment;
             path = Startup.path;
-            personalDictPath = Startup.personalDictPath;
         }
 
         [AcceptVerbs("Post")]
@@ -62,7 +58,7 @@ namespace EJ2DocumentEditorServer.Controllers
         {
             try
             {
-                SpellChecker spellCheck = new SpellChecker(spellDictionary,personalDictPath);
+                SpellChecker spellCheck = new SpellChecker();
                 spellCheck.GetSuggestions(spellChecker.LanguageID, spellChecker.TexttoCheck, spellChecker.CheckSpelling, spellChecker.CheckSuggestion, spellChecker.AddWord);
                 return Newtonsoft.Json.JsonConvert.SerializeObject(spellCheck);
             }
@@ -86,7 +82,7 @@ namespace EJ2DocumentEditorServer.Controllers
         {
             try
             {
-                SpellChecker spellCheck = new SpellChecker(spellDictionary,personalDictPath);
+                SpellChecker spellCheck = new SpellChecker();
                 spellCheck.CheckSpelling(spellChecker.LanguageID, spellChecker.TexttoCheck);
                 return Newtonsoft.Json.JsonConvert.SerializeObject(spellCheck);
             }

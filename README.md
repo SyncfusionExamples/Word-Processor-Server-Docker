@@ -153,6 +153,8 @@ The JSON file should contain the language-wise spell check dictionary configurat
 ]
 ```
 
+By default, the spell checker holds only one language dictionary in memory. If you want to hold multiple dictionaries in memory, then you must set the required count to environment variable `SPELLCHECK_CACHE_COUNT` in Docker compose file. For more information, please refer [spell check documentation](https://ej2.syncfusion.com/documentation/document-editor/spell-check)
+
 A JSON file is included in the default resource directory `/app/Data` of this Docker image with the name `spellcheck.json`. You can add a new file with your own spell check dictionary configurations.
 
 If you customize it, then you must set the new file name to environment variable `SPELLCHECK_JSON_FILENAME` in Docker compose file like below,
@@ -166,6 +168,7 @@ services:
       #Provide your license key for activation
       SYNCFUSION_LICENSE_KEY: YOUR_LICENSE_KEY
       SPELLCHECK_DICTIONARY_PATH: data
+      SPELLCHECK_CACHE_COUNT: 2
       SPELLCHECK_JSON_FILENAME: spellcheck1.json
     volumes: 
       -  ./data:/app/data  
