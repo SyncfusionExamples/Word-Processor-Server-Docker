@@ -13,7 +13,6 @@ using Syncfusion.EJ2.DocumentEditor;
 using WDocument = Syncfusion.DocIO.DLS.WordDocument;
 using WFormatType = Syncfusion.DocIO.FormatType;
 using Syncfusion.EJ2.SpellChecker;
-using EJ2DocumentEditorServer;
 
 namespace EJ2DocumentEditorServer.Controllers
 {
@@ -21,15 +20,11 @@ namespace EJ2DocumentEditorServer.Controllers
     public class DocumentEditorController : Controller
     {
         private readonly IHostingEnvironment _hostingEnvironment;
-        List<DictionaryData> spellDictionary;
-        string personalDictPath;
         string path;
         public DocumentEditorController(IHostingEnvironment hostingEnvironment)
         {
-            _hostingEnvironment = hostingEnvironment;            
-            spellDictionary = Startup.spellDictCollection;
+            _hostingEnvironment = hostingEnvironment;
             path = Startup.path;
-            personalDictPath = Startup.personalDictPath;
         }
 
         [AcceptVerbs("Post")]
@@ -48,10 +43,45 @@ namespace EJ2DocumentEditorServer.Controllers
             file.CopyTo(stream);
             stream.Position = 0;
 
+            //Hooks MetafileImageParsed event.
+            WordDocument.MetafileImageParsed += OnMetafileImageParsed;
             WordDocument document = WordDocument.Load(stream, GetFormatType(type.ToLower()));
+            //Unhooks MetafileImageParsed event.
+            WordDocument.MetafileImageParsed -= OnMetafileImageParsed;
+
             string json = Newtonsoft.Json.JsonConvert.SerializeObject(document);
             document.Dispose();
             return json;
+        }
+
+        //Converts Metafile to raster image.
+        private static void OnMetafileImageParsed(object sender, MetafileImageParsedEventArgs args)
+        {
+            //You can write your own method definition for converting metafile to raster image using any third-party image converter.
+            args.ImageStream = ConvertMetafileToRasterImage(args.MetafileStream);
+        }
+
+        private static Stream ConvertMetafileToRasterImage(Stream ImageStream)
+        {
+            //Here we are loading a default raster image as fallback.
+            Stream imgStream = GetManifestResourceStream("ImageNotFound.jpg");
+            return imgStream;
+            //To do : Write your own logic for converting metafile to raster image using any third-party image converter(Syncfusion doesn't provide any image converter).
+        }
+
+        private static Stream GetManifestResourceStream(string fileName)
+        {
+            System.Reflection.Assembly execAssembly = typeof(WDocument).Assembly;
+            string[] resourceNames = execAssembly.GetManifestResourceNames();
+            foreach (string resourceName in resourceNames)
+            {
+                if (resourceName.EndsWith("." + fileName))
+                {
+                    fileName = resourceName;
+                    break;
+                }
+            }
+            return execAssembly.GetManifestResourceStream(fileName);
         }
 
         [AcceptVerbs("Post")]
@@ -62,7 +92,7 @@ namespace EJ2DocumentEditorServer.Controllers
         {
             try
             {
-                SpellChecker spellCheck = new SpellChecker(spellDictionary,personalDictPath);
+                SpellChecker spellCheck = new SpellChecker();
                 spellCheck.GetSuggestions(spellChecker.LanguageID, spellChecker.TexttoCheck, spellChecker.CheckSpelling, spellChecker.CheckSuggestion, spellChecker.AddWord);
                 return Newtonsoft.Json.JsonConvert.SerializeObject(spellCheck);
             }
@@ -86,7 +116,7 @@ namespace EJ2DocumentEditorServer.Controllers
         {
             try
             {
-                SpellChecker spellCheck = new SpellChecker(spellDictionary,personalDictPath);
+                SpellChecker spellCheck = new SpellChecker();
                 spellCheck.CheckSpelling(spellChecker.LanguageID, spellChecker.TexttoCheck);
                 return Newtonsoft.Json.JsonConvert.SerializeObject(spellCheck);
             }

@@ -24,9 +24,7 @@ namespace EJ2DocumentEditorServer
 {
     public class Startup
     {
-        internal static List<DictionaryData> spellDictCollection;
         internal static string path;
-        internal static string personalDictPath;
         public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -38,6 +36,11 @@ namespace EJ2DocumentEditorServer
             Configuration = builder.Build();
             path = Configuration["SPELLCHECK_DICTIONARY_PATH"];
             string jsonFileName = Configuration["SPELLCHECK_JSON_FILENAME"];
+            int cacheCount;
+            if (!int.TryParse(Configuration["SPELLCHECK_CACHE_COUNT"], out cacheCount))
+            {
+                cacheCount = 2;
+            }
             //check the spell check dictionary path environment variable value and assign default data folder
             //if it is null.
             path = string.IsNullOrEmpty(path) ? Path.Combine(env.ContentRootPath, "Data") : Path.Combine(env.ContentRootPath, path);
@@ -47,13 +50,15 @@ namespace EJ2DocumentEditorServer
             {
                 string jsonImport = System.IO.File.ReadAllText(jsonFileName);
                 List<DictionaryData> spellChecks = JsonConvert.DeserializeObject<List<DictionaryData>>(jsonImport);
-                spellDictCollection = new List<DictionaryData>();
+                List<DictionaryData> spellDictCollection = new List<DictionaryData>();
+                string personalDictPath = string.Empty;
                 //construct the dictionary file path using customer provided path and dictionary name
                 foreach (var spellCheck in spellChecks)
                 {
                     spellDictCollection.Add(new DictionaryData(spellCheck.LanguadeID, Path.Combine(path, spellCheck.DictionaryPath), Path.Combine(path, spellCheck.AffixPath)));
                     personalDictPath = Path.Combine(path, spellCheck.PersonalDictPath);
                 }
+                SpellChecker.InitializeDictionaries(spellDictCollection, personalDictPath, cacheCount);
             }
         }
 
