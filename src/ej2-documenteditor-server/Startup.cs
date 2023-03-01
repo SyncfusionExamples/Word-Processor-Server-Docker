@@ -39,7 +39,7 @@ namespace EJ2DocumentEditorServer
             int cacheCount;
             if (!int.TryParse(Configuration["SPELLCHECK_CACHE_COUNT"], out cacheCount))
             {
-                cacheCount = 2;
+                cacheCount = 1;
             }
             //check the spell check dictionary path environment variable value and assign default data folder
             //if it is null.
