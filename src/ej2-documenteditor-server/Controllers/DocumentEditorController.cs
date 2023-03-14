@@ -152,7 +152,11 @@ namespace EJ2DocumentEditorServer.Controllers
             {
                 try
                 {
+                    //Hooks MetafileImageParsed event.
+                    WordDocument.MetafileImageParsed += OnMetafileImageParsed;
                     WordDocument document = WordDocument.LoadString(param.content, GetFormatType(param.type.ToLower()));
+                    //Unhooks MetafileImageParsed event.
+                    WordDocument.MetafileImageParsed -= OnMetafileImageParsed;
                     string json = Newtonsoft.Json.JsonConvert.SerializeObject(document);
                     document.Dispose();
                     return json;
