@@ -9,7 +9,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Data.Edm;
 using Microsoft.AspNet.OData.Builder;
 using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNetCore.Routing;
@@ -19,6 +18,8 @@ using EJ2DocumentEditorServer.Controllers;
 using Syncfusion.EJ2.SpellChecker;
 using System.IO;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using Microsoft.AspNetCore.ResponseCompression;
 
 namespace EJ2DocumentEditorServer
 {
@@ -63,27 +64,30 @@ namespace EJ2DocumentEditorServer
         }
 
         public IConfiguration Configuration { get; }
-
+        readonly string MyAllowSpecificOrigins = "MyPolicy";
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddOData();
-            services.AddMvc().AddJsonOptions(x => {
-                x.SerializerSettings.ContractResolver = null;
+            services.AddControllers();
+            services.AddMemoryCache();
+            services.AddControllers().AddNewtonsoftJson(options =>
+            {
+                // Use the default property (Pascal) casing
+                options.SerializerSettings.ContractResolver = new DefaultContractResolver();
             });
 
             services.AddCors(options =>
             {
-                options.AddPolicy("AllowAllOrigins", builder =>
+                options.AddPolicy(MyAllowSpecificOrigins,
+                builder =>
                 {
                     builder.AllowAnyOrigin()
-                    .AllowAnyMethod()
-                    .AllowAnyHeader();
+                      .AllowAnyMethod()
+                      .AllowAnyHeader();
                 });
             });
-           
-            // Add framework services.
-            services.AddMvc();
+            services.Configure<GzipCompressionProviderOptions>(options => options.Level = System.IO.Compression.CompressionLevel.Optimal);
+            services.AddResponseCompression();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -98,10 +102,18 @@ namespace EJ2DocumentEditorServer
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.UseMvc(routes =>
+            else
             {
-                routes.MapRoute("default", "{api}/{controller}/{action}/{id?}");
+                app.UseHsts();
+            }
+            app.UseHttpsRedirection();
+            app.UseRouting();
+            app.UseAuthorization();
+            app.UseCors(MyAllowSpecificOrigins);
+            app.UseResponseCompression();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers().RequireCors("MyPolicy");
             });
         }
 
