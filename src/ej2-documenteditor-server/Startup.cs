@@ -26,6 +26,7 @@ namespace EJ2DocumentEditorServer
     public class Startup
     {
         internal static string path;
+        internal static string uploadPath;
         public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -36,6 +37,7 @@ namespace EJ2DocumentEditorServer
 
             Configuration = builder.Build();
             path = Configuration["SPELLCHECK_DICTIONARY_PATH"];
+            uploadPath = Configuration["FILE_UPLOAD_DIR"];
             string jsonFileName = Configuration["SPELLCHECK_JSON_FILENAME"];
             int cacheCount;
             if (!int.TryParse(Configuration["SPELLCHECK_CACHE_COUNT"], out cacheCount))
@@ -44,9 +46,12 @@ namespace EJ2DocumentEditorServer
             }
             //check the spell check dictionary path environment variable value and assign default data folder
             //if it is null.
-            path = string.IsNullOrEmpty(path) ? Path.Combine(env.ContentRootPath, "Data") : Path.Combine(env.ContentRootPath, path);
+            path = string.IsNullOrEmpty(path) ? Path.Combine(env.ContentRootPath, "Data/dict") : Path.Combine(env.ContentRootPath, path);
+            uploadPath = string.IsNullOrEmpty(uploadPath) ? Path.Combine(env.ContentRootPath, "Data/files") : Path.Combine(env.ContentRootPath, uploadPath);
+
+
             //Set the default spellcheck.json file if the json filename is empty.
-            jsonFileName = string.IsNullOrEmpty(jsonFileName) ? Path.Combine(path, "spellcheck.json") : Path.Combine(path, jsonFileName) ;
+            jsonFileName = string.IsNullOrEmpty(jsonFileName) ? Path.Combine(path, "spellcheck.json") : Path.Combine(path, jsonFileName);
             if (System.IO.File.Exists(jsonFileName))
             {
                 string jsonImport = System.IO.File.ReadAllText(jsonFileName);
@@ -94,7 +99,7 @@ namespace EJ2DocumentEditorServer
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             string license_key = Configuration["SYNCFUSION_LICENSE_KEY"];
-            if (license_key!=null && license_key!=string.Empty)
+            if (license_key != null && license_key != string.Empty)
                 Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(license_key);
             app.UseDeveloperExceptionPage();
             app.UseCors("AllowAllOrigins");

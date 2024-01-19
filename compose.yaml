@@ -1,0 +1,8 @@
+services:
+  syncfusion:
+    build: .
+    image: word-processor-server:0.1
+    volumes:
+      - ./files:/app/Data/files
+    ports:
+      - 8081:80

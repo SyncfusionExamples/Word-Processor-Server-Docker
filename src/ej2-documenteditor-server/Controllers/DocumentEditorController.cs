@@ -13,6 +13,7 @@ using Syncfusion.EJ2.DocumentEditor;
 using WDocument = Syncfusion.DocIO.DLS.WordDocument;
 using WFormatType = Syncfusion.DocIO.FormatType;
 using Syncfusion.EJ2.SpellChecker;
+using System.Diagnostics;
 
 namespace EJ2DocumentEditorServer.Controllers
 {
@@ -21,10 +22,12 @@ namespace EJ2DocumentEditorServer.Controllers
     {
         private readonly IHostingEnvironment _hostingEnvironment;
         string path;
+        string uploadPath;
         public DocumentEditorController(IHostingEnvironment hostingEnvironment)
         {
             _hostingEnvironment = hostingEnvironment;
             path = Startup.path;
+            uploadPath = Startup.uploadPath;
         }
 
         [AcceptVerbs("Post")]
@@ -101,7 +104,7 @@ namespace EJ2DocumentEditorServer.Controllers
                 return "{\"SpellCollection\":[],\"HasSpellingError\":false,\"Suggestions\":null}";
             }
         }
-		// GET api/values
+        // GET api/values
         [HttpGet]
         public IEnumerable<string> Get()
         {
@@ -146,7 +149,7 @@ namespace EJ2DocumentEditorServer.Controllers
         [HttpPost]
         [EnableCors("AllowAllOrigins")]
         [Route("SystemClipboard")]
-        public string SystemClipboard([FromBody]CustomParameter param)
+        public string SystemClipboard([FromBody] CustomParameter param)
         {
             if (param.content != null && param.content != "")
             {
@@ -183,7 +186,7 @@ namespace EJ2DocumentEditorServer.Controllers
         [HttpPost]
         [EnableCors("AllowAllOrigins")]
         [Route("RestrictEditing")]
-        public string[] RestrictEditing([FromBody]CustomRestrictParameter param)
+        public string[] RestrictEditing([FromBody] CustomRestrictParameter param)
         {
             if (param.passwordBase64 == "" && param.passwordBase64 == null)
                 return null;
@@ -210,7 +213,7 @@ namespace EJ2DocumentEditorServer.Controllers
         [Route("LoadDocument")]
         public string LoadDocument([FromForm] UploadDocument uploadDocument)
         {
-            string documentPath= Path.Combine(path, uploadDocument.DocumentName);
+            string documentPath = Path.Combine(path, uploadDocument.DocumentName);
             Stream stream = null;
             if (System.IO.File.Exists(documentPath))
             {
@@ -357,6 +360,44 @@ namespace EJ2DocumentEditorServer.Controllers
                 FileDownloadName = fileName
             };
         }
+
+        [AcceptVerbs("Post")]
+        [HttpPost]
+        [EnableCors("AllowAllOrigins")]
+        [Route("Save")]
+        public void Save([FromBody] SaveParameter data)
+        {
+
+            string name = data.FileName;
+            string documentPath = Path.Combine(uploadPath, name);
+            Console.Write("Document path: " + documentPath);
+            string format = RetrieveFileType(name);
+            if (string.IsNullOrEmpty(name))
+            {
+                name = "Document1.doc";
+            }
+            WDocument document = WordDocument.Save(data.Content);
+            // Use Path.Combine(path, filename) where path is set as env var?
+            FileStream fileStream = new FileStream(documentPath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+            document.Save(fileStream, GetWFormatType(format));
+            document.Close();
+            fileStream.Close();
+        }
+
+        public class SaveParameter
+        {
+            public string Content { get; set; }
+            public string FileName { get; set; }
+        }
+
+        private string RetrieveFileType(string name)
+        {
+            int index = name.LastIndexOf('.');
+            string format = index > -1 && index < name.Length - 1 ?
+                name.Substring(index) : ".doc";
+            return format;
+        }
+
         private string GetValue(IFormCollection data, string key)
         {
             if (data.ContainsKey(key))

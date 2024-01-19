@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="../buildMultiTargeting/ej2-documenteditor-server.props" />
+</Project>

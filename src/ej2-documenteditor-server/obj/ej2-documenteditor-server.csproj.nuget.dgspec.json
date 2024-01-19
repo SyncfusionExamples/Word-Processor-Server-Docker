@@ -1,0 +1,123 @@
+{
+  "format": 1,
+  "restore": {
+    "/home/samr/repos/Word-Processor-Server-Docker/src/ej2-documenteditor-server/ej2-documenteditor-server.csproj": {}
+  },
+  "projects": {
+    "/home/samr/repos/Word-Processor-Server-Docker/src/ej2-documenteditor-server/ej2-documenteditor-server.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/samr/repos/Word-Processor-Server-Docker/src/ej2-documenteditor-server/ej2-documenteditor-server.csproj",
+        "projectName": "ej2-documenteditor-server",
+        "projectPath": "/home/samr/repos/Word-Processor-Server-Docker/src/ej2-documenteditor-server/ej2-documenteditor-server.csproj",
+        "packagesPath": "/home/samr/.nuget/packages/",
+        "outputPath": "/home/samr/repos/Word-Processor-Server-Docker/src/ej2-documenteditor-server/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/samr/repos/Word-Processor-Server-Docker/src/ej2-documenteditor-server/NuGet.Config",
+          "/home/samr/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Microsoft.AspNetCore.Mvc.NewtonsoftJson": {
+              "target": "Package",
+              "version": "[6.0.21, )"
+            },
+            "Microsoft.AspNetCore.OData": {
+              "target": "Package",
+              "version": "[7.0.1, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[2.1.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "target": "Package",
+              "version": "[2.1.0, )"
+            },
+            "Microsoft.VisualStudio.Azure.Containers.Tools.Targets": {
+              "target": "Package",
+              "version": "[1.17.2, )"
+            },
+            "Npgsql": {
+              "target": "Package",
+              "version": "[4.0.2, )"
+            },
+            "Npgsql.EntityFrameworkCore.PostgreSQL": {
+              "target": "Package",
+              "version": "[2.1.1.1, )"
+            },
+            "Syncfusion.Compression.Net.Core": {
+              "target": "Package",
+              "version": "[*, )"
+            },
+            "Syncfusion.EJ2.SpellChecker.AspNet.Core": {
+              "target": "Package",
+              "version": "[*, )"
+            },
+            "Syncfusion.EJ2.WordEditor.AspNet.Core": {
+              "target": "Package",
+              "version": "[*, )"
+            },
+            "Syncfusion.OfficeChart.Net.Core": {
+              "target": "Package",
+              "version": "[*, )"
+            },
+            "System.Drawing.Common": {
+              "target": "Package",
+              "version": "[4.*, )"
+            },
+            "System.Linq.Dynamic.Core": {
+              "target": "Package",
+              "version": "[1.0.9.2, )"
+            },
+            "System.Runtime.CompilerServices.Unsafe": {
+              "target": "Package",
+              "version": "[4.*, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/8.0.101/RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

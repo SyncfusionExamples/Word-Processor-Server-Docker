@@ -8,23 +8,23 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Data\customDict.dic" />
-    <None Remove="Data\en_US.aff" />
-    <None Remove="Data\en_US.dic" />
-    <None Remove="Data\Getting Started.docx" />
+    <None Remove="Data\dict\customDict.dic" />
+    <None Remove="Data\dict\en_US.aff" />
+    <None Remove="Data\dict\en_US.dic" />
+    <None Remove="Data\dict\Getting Started.docx" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Data\customDict.dic">
+    <Content Include="Data\dict\customDict.dic">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Data\en_US.aff">
+    <Content Include="Data\dict\en_US.aff">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Data\en_US.dic">
+    <Content Include="Data\dict\en_US.dic">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Data\Getting Started.docx">
+    <Content Include="Data\dict\Getting Started.docx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
