@@ -28,7 +28,7 @@ namespace EJ2DocumentEditorServer.Controllers
         public DocumentEditorController(IHostingEnvironment hostingEnvironment)
         {
             _hostingEnvironment = hostingEnvironment;
-            path = Startup.path;
+            path = Program.path;
         }
 
         [AcceptVerbs("Post")]
