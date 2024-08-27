@@ -19,6 +19,7 @@ FROM build AS publish
 RUN dotnet publish -c Release -o /app
 
 FROM base AS final
+RUN apt-get update && apt-get install -y libfontconfig
 WORKDIR /app
 COPY --from=publish /app .
 ENTRYPOINT ["dotnet", "ej2-documenteditor-server.dll"]

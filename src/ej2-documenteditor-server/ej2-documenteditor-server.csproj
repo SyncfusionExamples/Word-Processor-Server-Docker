@@ -54,6 +54,7 @@
 	  <PackageReference Include="Syncfusion.Pdf.Net.Core" Version="*" />
     <PackageReference Include="BitMiracle.LibTiff.NET" Version="2.4.649" />
     <PackageReference Include="SkiaSharp" Version="2.88.6" />
+    <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="2.88.6" />
   </ItemGroup>
 
 </Project>
