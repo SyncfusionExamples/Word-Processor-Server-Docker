@@ -10,7 +10,12 @@ using Microsoft.AspNetCore.Http;
 using Syncfusion.EJ2.DocumentEditor;
 using System.Text;
 using WDocument = Syncfusion.DocIO.DLS.WordDocument;
+using WParagraph = Syncfusion.DocIO.DLS.WParagraph;
+using WParagraphStyle = Syncfusion.DocIO.DLS.WParagraphStyle;
+using WTextRange = Syncfusion.DocIO.DLS.WTextRange;
 using WFormatType = Syncfusion.DocIO.FormatType;
+using Entity = Syncfusion.DocIO.DLS.Entity;
+using EntityType = Syncfusion.DocIO.DLS.EntityType;
 using Syncfusion.EJ2.SpellChecker;
 using Syncfusion.DocIORenderer;
 using Syncfusion.Pdf;
@@ -144,12 +149,15 @@ namespace EJ2DocumentEditorServer.Controllers
 
         // Decode base64 if it's base64, otherwise just returns the
         // string as it is
-        internal static string DecodeIfBase64(string base64)
+        internal static byte[] DecodeIfBase64(string base64)
         {
           if (IsBase64(base64)) {
-            return Encoding.UTF8.GetString(Convert.FromBase64String(base64));
+            return Convert.FromBase64String(base64);
           }
-          return base64;
+          if (IsValidUtf8(base64)) {
+            return Encoding.UTF8.GetBytes(base64);
+          };
+          return Encoding.Default.GetBytes(base64);
         }
 
         // Check if a string is base64 encoded
@@ -157,6 +165,22 @@ namespace EJ2DocumentEditorServer.Controllers
         {
           Span<byte> buffer = new Span<byte>(new byte[base64.Length]);
           return Convert.TryFromBase64String(base64, buffer , out int bytesParsed);
+        }
+
+
+        private static bool IsValidUtf8(string input)
+        {
+            try
+            {
+                // Try to decode the string as UTF-8
+                Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(input));
+                return true;
+            }
+            catch
+            {
+                // If an exception is thrown, the string is not valid UTF-8
+                return false;
+            }
         }
 
         // Gets the FormatType from an extension string
@@ -223,35 +247,73 @@ namespace EJ2DocumentEditorServer.Controllers
             }
         }
 
-        private WDocument GetWDocument(ConversionParameters param)
+        public WDocument GetWDocument(ConversionParameters param)
         {
-            byte[] byteArray = Encoding.UTF8.GetBytes(DecodeIfBase64(param.content));
+            byte[] byteArray = DecodeIfBase64(param.content);
             MemoryStream stream = new MemoryStream(byteArray);
 
             // Load the HTML content into the WordDocument
             WDocument document = new WDocument(stream, GetWFormatType(param.from));
+
+            // Set default font styles
+            WParagraphStyle defaultStyle = document.Styles.FindByName("Normal") as WParagraphStyle;
+            ChangeFontName(document, "Calibri");
+            document.FontSettings.FallbackFonts.InitializeDefault();
             stream.Dispose();
 
             return document;
         }
 
+        static void ChangeFontName(WDocument document, string fontName)
+        {
+            // Find all paragraphs by EntityType in the Word document.
+            List<Entity> paragraphs = document.FindAllItemsByProperty(EntityType.Paragraph, null, null);
+
+            // Change the font name for all paragraph marks (non-printing characters).
+            for (int i = 0; i < paragraphs.Count; i++)
+            {
+                WParagraph paragraph = paragraphs[i] as WParagraph;
+                if (paragraph.BreakCharacterFormat.FontName == "Times New Roman") {
+                    paragraph.BreakCharacterFormat.FontName = fontName;
+                }
+            }
+
+            // Find all text ranges by EntityType in the Word document.
+            List<Entity> textRanges = document.FindAllItemsByProperty(EntityType.TextRange, null, null);
+
+            // Change the font name for all text content in the document.
+            for (int i = 0; i < textRanges.Count; i++)
+            {
+                WTextRange textRange = textRanges[i] as WTextRange;
+                if (textRange.CharacterFormat.FontName == "Times New Roman") {
+                    textRange.CharacterFormat.FontName = fontName;
+                }
+            }
+        } 
+
         private WordDocument GetDocument(ConversionParameters param)
         {
           //Hooks MetafileImageParsed event.
           WordDocument.MetafileImageParsed += OnMetafileImageParsed;
-          WordDocument document = WordDocument.LoadString(DecodeIfBase64(param.content), GetFormatType(param.from));
+          byte[] byteArray = DecodeIfBase64(param.content);
+          MemoryStream stream = new MemoryStream(byteArray);
+
+          WordDocument document = WordDocument.Load(stream, GetFormatType(param.from));
           //Unhooks MetafileImageParsed event.
           WordDocument.MetafileImageParsed -= OnMetafileImageParsed;
+          stream.Dispose();
           return document;
         }
 
-        
 
         internal string ExportPDF(WDocument wordDocument)
         {
 
             // Instantiation of DocIORenderer for Word to PDF conversion.
             DocIORenderer render = new DocIORenderer();
+            //Sets true to embed TrueType fonts
+            render.Settings.EmbedFonts = true;
+            render.Settings.EmbedCompleteFonts = true;
 
             //Converts Word document into PDF document
             PdfDocument pdfDocument = render.ConvertToPDF(wordDocument);
