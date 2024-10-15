@@ -2,7 +2,7 @@ name: Build & Deploy SyncFusion Backend Image to AWS
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   build-and-push:
