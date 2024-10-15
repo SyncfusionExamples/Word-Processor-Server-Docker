@@ -5,6 +5,8 @@ ENV SYNCFUSION_LICENSE_KEY=""
 ENV SPELLCHECK_DICTIONARY_PATH=""
 ENV SPELLCHECK_JSON_FILENAME=""
 ENV SPELLCHECK_CACHE_COUNT=""
+RUN apt-get update \
+    && apt-get install -y libfontconfig
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 
 WORKDIR /source
