@@ -49,8 +49,8 @@
     <PackageReference Include="Syncfusion.EJ2.WordEditor.AspNet.Core" Version="*" />
 
     <!-- We extend the wordprocessor image with some extra Syncfusion Document Processing APIs:-->
-    <PackageReference Include="Syncfusion.DocIORenderer.Net.Core" Version="27.1.48" />
-    <PackageReference Include="Syncfusion.HtmlToPdfConverter.Net.Linux" Version="27.1.48" />
+    <PackageReference Include="Syncfusion.DocIORenderer.Net.Core" Version="27.2.2" />
+    <PackageReference Include="Syncfusion.HtmlToPdfConverter.Net.Linux" Version="27.2.2" />
     <PackageReference Include="SkiaSharp" Version="2.88.7" />
     <PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="2.88.7" />
 	<PackageReference Include="Syncfusion.EJ2.SpellChecker.AspNet.Core" Version="*" />
