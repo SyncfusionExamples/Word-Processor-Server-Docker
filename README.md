@@ -1,6 +1,6 @@
 # Word Processor Server 
  
-The [Syncfusion **Word Processor (also known as Document Editor)**](https://www.syncfusion.com/javascript-ui-controls/js-word-processor?utm_source=docker&utm_medium=listing&utm_campaign=javascript-word-processor-docker) is a component with editing capabilities like Microsoft Word. It is used to create, edit, view, and print Word documents. It provides all the common word processing abilities, including editing text; formatting contents; resizing images and tables; finding and replacing text; importing, exporting, and printing Word documents; and using bookmarks and tables of contents. 
+The [Syncfusion&reg; **Word Processor (also known as Document Editor)**](https://www.syncfusion.com/javascript-ui-controls/js-word-processor?utm_source=docker&utm_medium=listing&utm_campaign=javascript-word-processor-docker) is a component with editing capabilities like Microsoft Word. It is used to create, edit, view, and print Word documents. It provides all the common word processing abilities, including editing text; formatting contents; resizing images and tables; finding and replacing text; importing, exporting, and printing Word documents; and using bookmarks and tables of contents. 
  
 This Docker project is the predefined Docker container for Syncfusion’s Word Processor backend functionalities. This server-side Web API project is targeting ASP.NET Core 6.0.
 
