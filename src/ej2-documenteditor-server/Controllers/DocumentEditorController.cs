@@ -99,7 +99,7 @@ namespace EJ2DocumentEditorServer.Controllers
                 return "{\"SpellCollection\":[],\"HasSpellingError\":false,\"Suggestions\":null}";
             }
         }
-		// GET api/values
+        // GET api/values
         [HttpGet]
         public IEnumerable<string> Get()
         {
@@ -144,7 +144,7 @@ namespace EJ2DocumentEditorServer.Controllers
         [HttpPost]
         [EnableCors("AllowAllOrigins")]
         [Route("SystemClipboard")]
-        public string SystemClipboard([FromBody]CustomParameter param)
+        public string SystemClipboard([FromBody] CustomParameter param)
         {
             if (param.content != null && param.content != "")
             {
@@ -181,7 +181,7 @@ namespace EJ2DocumentEditorServer.Controllers
         [HttpPost]
         [EnableCors("AllowAllOrigins")]
         [Route("RestrictEditing")]
-        public string[] RestrictEditing([FromBody]CustomRestrictParameter param)
+        public string[] RestrictEditing([FromBody] CustomRestrictParameter param)
         {
             if (param.passwordBase64 == "" && param.passwordBase64 == null)
                 return null;
@@ -208,7 +208,7 @@ namespace EJ2DocumentEditorServer.Controllers
         [Route("LoadDocument")]
         public string LoadDocument([FromForm] UploadDocument uploadDocument)
         {
-            string documentPath= Path.Combine(path, uploadDocument.DocumentName);
+            string documentPath = Path.Combine(path, uploadDocument.DocumentName);
             Stream stream = null;
             if (System.IO.File.Exists(documentPath))
             {
@@ -354,6 +354,46 @@ namespace EJ2DocumentEditorServer.Controllers
             {
                 FileDownloadName = fileName
             };
+        }
+        [HttpPost]
+        [Route("CompareDocuments")]
+        public string CompareDocuments(IFormCollection data)
+        {
+            if (data.Files.Count < 2) return null;
+            IFormFile originalDoc = data.Files[0];
+            IFormFile revisedDoc = data.Files[1];
+            string type1 = Path.GetExtension(originalDoc.FileName)?.ToLower() ?? ".docx";
+            string type2 = Path.GetExtension(revisedDoc.FileName)?.ToLower() ?? ".docx";
+
+            Stream originalStream = GetDocumentStream(originalDoc, type1);
+
+            Stream revisedStream = GetDocumentStream(revisedDoc, type2);
+
+            using (originalStream)
+            using (WDocument originalDocument = new WDocument(originalStream, WFormatType.Docx))
+            using (revisedStream)
+            using (WDocument revisedDocument = new WDocument(revisedStream, WFormatType.Docx))
+            {
+                originalDocument.Compare(revisedDocument);
+                var wordDoc = Syncfusion.EJ2.DocumentEditor.WordDocument.Load(originalDocument);
+                return Newtonsoft.Json.JsonConvert.SerializeObject(wordDoc);
+            }
+        }
+        private Stream GetDocumentStream(IFormFile file, string fileType)
+        {
+            if (fileType == ".docx")
+            {
+                return file.OpenReadStream();
+            }
+        
+            using (var reader = new StreamReader(file.OpenReadStream()))
+            {
+                string sfdtContent = reader.ReadToEnd();
+                WDocument document = WordDocument.Save(sfdtContent);
+                var stream = new MemoryStream();
+                document.Save(stream, Syncfusion.DocIO.FormatType.Docx);
+                return stream;
+            }
         }
         private string GetValue(IFormCollection data, string key)
         {
