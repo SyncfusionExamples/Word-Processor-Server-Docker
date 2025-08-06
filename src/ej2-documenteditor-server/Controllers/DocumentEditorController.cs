@@ -355,44 +355,62 @@ namespace EJ2DocumentEditorServer.Controllers
                 FileDownloadName = fileName
             };
         }
+        [AcceptVerbs("Post")]
         [HttpPost]
+        [EnableCors("AllowAllOrigins")]
         [Route("CompareDocuments")]
         public string CompareDocuments(IFormCollection data)
         {
-            if (data.Files.Count < 2) return null;
-            IFormFile originalDoc = data.Files[0];
-            IFormFile revisedDoc = data.Files[1];
-            string type1 = Path.GetExtension(originalDoc.FileName)?.ToLower() ?? ".docx";
-            string type2 = Path.GetExtension(revisedDoc.FileName)?.ToLower() ?? ".docx";
+            if (data.Files.Count == 0 || data.Files.Count < 2)
+                return null;
 
-            Stream originalStream = GetDocumentStream(originalDoc, type1);
+            IFormFile originalFile = data.Files[0];
+            IFormFile revisedFile = data.Files[1];
 
-            Stream revisedStream = GetDocumentStream(revisedDoc, type2);
+            WDocument originalDocument = GetWordDocument(originalFile);
+            WDocument revisedDocument = GetWordDocument(revisedFile);
+            originalDocument.Compare(revisedDocument);
+            //Hooks MetafileImageParsed event.
+            WordDocument.MetafileImageParsed += OnMetafileImageParsed;
+            WordDocument document = WordDocument.Load(originalDocument);
+            //Unhooks MetafileImageParsed event.
+            WordDocument.MetafileImageParsed -= OnMetafileImageParsed;
+            originalDocument.Close();
+            revisedDocument.Close();
 
-            using (originalStream)
-            using (WDocument originalDocument = new WDocument(originalStream, WFormatType.Docx))
-            using (revisedStream)
-            using (WDocument revisedDocument = new WDocument(revisedStream, WFormatType.Docx))
-            {
-                originalDocument.Compare(revisedDocument);
-                var wordDoc = Syncfusion.EJ2.DocumentEditor.WordDocument.Load(originalDocument);
-                return Newtonsoft.Json.JsonConvert.SerializeObject(wordDoc);
-            }
+            string json = Newtonsoft.Json.JsonConvert.SerializeObject(document);
+            document.Dispose();
+            return json;
         }
-        private Stream GetDocumentStream(IFormFile file, string fileType)
+
+        private static WDocument GetWordDocument(IFormFile file)
         {
-            if (fileType == ".docx")
+            Stream stream = new MemoryStream();
+            int index = file.FileName.LastIndexOf('.');
+            string type = index > -1 && index < file.FileName.Length - 1 ?
+                file.FileName.Substring(index) : ".docx";
+            file.CopyTo(stream);
+            stream.Position = 0;
+
+            WDocument document;
+            if (type == ".sfdt")
             {
-                return file.OpenReadStream();
+                using (var reader = new StreamReader(stream))
+                {
+                    string sfdtContent = reader.ReadToEnd();
+                    document = WordDocument.Save(sfdtContent);
+                    var outStream = new MemoryStream();
+                    document.Save(outStream, WFormatType.Docx);
+                    document.Close();
+                    WDocument wordDocument = new WDocument(outStream, WFormatType.Docx);
+                    return wordDocument;
+                }
             }
-        
-            using (var reader = new StreamReader(file.OpenReadStream()))
+            else
             {
-                string sfdtContent = reader.ReadToEnd();
-                WDocument document = WordDocument.Save(sfdtContent);
-                var stream = new MemoryStream();
-                document.Save(stream, Syncfusion.DocIO.FormatType.Docx);
-                return stream;
+                document = new WDocument(stream, GetWFormatType(type));
+                stream.Dispose();
+                return document;
             }
         }
         private string GetValue(IFormCollection data, string key)
