@@ -99,7 +99,7 @@ namespace EJ2DocumentEditorServer.Controllers
                 return "{\"SpellCollection\":[],\"HasSpellingError\":false,\"Suggestions\":null}";
             }
         }
-		// GET api/values
+        // GET api/values
         [HttpGet]
         public IEnumerable<string> Get()
         {
@@ -144,7 +144,7 @@ namespace EJ2DocumentEditorServer.Controllers
         [HttpPost]
         [EnableCors("AllowAllOrigins")]
         [Route("SystemClipboard")]
-        public string SystemClipboard([FromBody]CustomParameter param)
+        public string SystemClipboard([FromBody] CustomParameter param)
         {
             if (param.content != null && param.content != "")
             {
@@ -181,7 +181,7 @@ namespace EJ2DocumentEditorServer.Controllers
         [HttpPost]
         [EnableCors("AllowAllOrigins")]
         [Route("RestrictEditing")]
-        public string[] RestrictEditing([FromBody]CustomRestrictParameter param)
+        public string[] RestrictEditing([FromBody] CustomRestrictParameter param)
         {
             if (param.passwordBase64 == "" && param.passwordBase64 == null)
                 return null;
@@ -208,7 +208,7 @@ namespace EJ2DocumentEditorServer.Controllers
         [Route("LoadDocument")]
         public string LoadDocument([FromForm] UploadDocument uploadDocument)
         {
-            string documentPath= Path.Combine(path, uploadDocument.DocumentName);
+            string documentPath = Path.Combine(path, uploadDocument.DocumentName);
             Stream stream = null;
             if (System.IO.File.Exists(documentPath))
             {
@@ -354,6 +354,64 @@ namespace EJ2DocumentEditorServer.Controllers
             {
                 FileDownloadName = fileName
             };
+        }
+        [AcceptVerbs("Post")]
+        [HttpPost]
+        [EnableCors("AllowAllOrigins")]
+        [Route("CompareDocuments")]
+        public string CompareDocuments(IFormCollection data)
+        {
+            if (data.Files.Count == 0 || data.Files.Count < 2)
+                return null;
+
+            IFormFile originalFile = data.Files[0];
+            IFormFile revisedFile = data.Files[1];
+
+            WDocument originalDocument = GetWordDocument(originalFile);
+            WDocument revisedDocument = GetWordDocument(revisedFile);
+            originalDocument.Compare(revisedDocument);
+            //Hooks MetafileImageParsed event.
+            WordDocument.MetafileImageParsed += OnMetafileImageParsed;
+            WordDocument document = WordDocument.Load(originalDocument);
+            //Unhooks MetafileImageParsed event.
+            WordDocument.MetafileImageParsed -= OnMetafileImageParsed;
+            originalDocument.Close();
+            revisedDocument.Close();
+
+            string json = Newtonsoft.Json.JsonConvert.SerializeObject(document);
+            document.Dispose();
+            return json;
+        }
+
+        private static WDocument GetWordDocument(IFormFile file)
+        {
+            Stream stream = new MemoryStream();
+            int index = file.FileName.LastIndexOf('.');
+            string type = index > -1 && index < file.FileName.Length - 1 ?
+                file.FileName.Substring(index) : ".docx";
+            file.CopyTo(stream);
+            stream.Position = 0;
+
+            WDocument document;
+            if (type == ".sfdt")
+            {
+                using (var reader = new StreamReader(stream))
+                {
+                    string sfdtContent = reader.ReadToEnd();
+                    document = WordDocument.Save(sfdtContent);
+                    var outStream = new MemoryStream();
+                    document.Save(outStream, WFormatType.Docx);
+                    document.Close();
+                    WDocument wordDocument = new WDocument(outStream, WFormatType.Docx);
+                    return wordDocument;
+                }
+            }
+            else
+            {
+                document = new WDocument(stream, GetWFormatType(type));
+                stream.Dispose();
+                return document;
+            }
         }
         private string GetValue(IFormCollection data, string key)
         {
