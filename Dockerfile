@@ -5,6 +5,9 @@ ENV SYNCFUSION_LICENSE_KEY=""
 ENV SPELLCHECK_DICTIONARY_PATH=""
 ENV SPELLCHECK_JSON_FILENAME=""
 ENV SPELLCHECK_CACHE_COUNT=""
+RUN echo "deb http://deb.debian.org/debian bullseye main contrib" > /etc/apt/sources.list \
+    && apt-get update \
+    && apt-get install -y libfontconfig ttf-mscorefonts-installer
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 
 WORKDIR /source
