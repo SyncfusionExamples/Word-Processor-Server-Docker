@@ -1,12 +1,12 @@
-# Word Processor Server 
+# DOCX Editor (Document Editor)  Server 
  
-The [Syncfusion&reg; **Word Processor (also known as Document Editor)**](https://www.syncfusion.com/javascript-ui-controls/js-word-processor?utm_source=docker&utm_medium=listing&utm_campaign=javascript-word-processor-docker) is a component with editing capabilities like Microsoft Word. It is used to create, edit, view, and print Word documents. It provides all the common word processing abilities, including editing text; formatting contents; resizing images and tables; finding and replacing text; importing, exporting, and printing Word documents; and using bookmarks and tables of contents. 
+The [DOCX Editor](https://www.syncfusion.com/docx-editor-sdk/react-docx-editor?utm_source=github&utm_medium=listing&utm_campaign=github-github-documenteditor-examples) (Document Editor) is a component with editing capabilities like Microsoft Word. It is used to create, edit, view, and print Word documents. It provides all the common word processing abilities, including editing text; formatting contents; resizing images and tables; finding and replacing text; importing, exporting, and printing Word documents; and using bookmarks and tables of contents. 
  
-This Docker project is the predefined Docker container for Syncfusion’s Word Processor backend functionalities. This server-side Web API project is targeting ASP.NET Core 6.0.
+This Docker project is the predefined Docker container for Syncfusion’s DOCX Editor backend functionalities. This server-side Web API project is targeting ASP.NET Core 6.0.
 
 If you want to add new functionality or customize any existing functionalities, then create your own Docker file by referencing this Docker project.
 
-The Word Processor is supported in the [JavaScript](https://www.syncfusion.com/javascript-ui-controls?utm_source=docker&utm_medium=listing&utm_campaign=javascript-word-processor-docker), [Angular](https://www.syncfusion.com/angular-ui-components?utm_source=docker&utm_medium=listing&utm_campaign=javascript-word-processor-docker), [React](https://www.syncfusion.com/react-ui-components?utm_source=docker&utm_medium=listing&utm_campaign=javascript-word-processor-docker), [Vue](https://www.syncfusion.com/vue-ui-components?utm_source=docker&utm_medium=listing&utm_campaign=javascript-word-processor-docker), [ASP.NET Core](https://www.syncfusion.com/aspnet-core-ui-controls?utm_source=docker&utm_medium=listing&utm_campaign=javascript-word-processor-docker), [ASP.NET MVC](https://www.syncfusion.com/aspnet-mvc-ui-controls?utm_source=docker&utm_medium=listing&utm_campaign=javascript-word-processor-docker), and [Blazor](https://www.syncfusion.com/blazor-components?utm_source=docker&utm_medium=listing&utm_campaign=javascript-word-processor-docker) platforms.
+The DOCX Editor is supported in the [JavaScript](https://www.syncfusion.com/javascript-ui-controls?utm_source=docker&utm_medium=listing&utm_campaign=javascript-word-processor-docker), [Angular](https://www.syncfusion.com/angular-ui-components?utm_source=docker&utm_medium=listing&utm_campaign=javascript-word-processor-docker), [React](https://www.syncfusion.com/react-ui-components?utm_source=docker&utm_medium=listing&utm_campaign=javascript-word-processor-docker), [Vue](https://www.syncfusion.com/vue-ui-components?utm_source=docker&utm_medium=listing&utm_campaign=javascript-word-processor-docker), [ASP.NET Core](https://www.syncfusion.com/aspnet-core-ui-controls?utm_source=docker&utm_medium=listing&utm_campaign=javascript-word-processor-docker), [ASP.NET MVC](https://www.syncfusion.com/aspnet-mvc-ui-controls?utm_source=docker&utm_medium=listing&utm_campaign=javascript-word-processor-docker), and [Blazor](https://www.syncfusion.com/blazor-components?utm_source=docker&utm_medium=listing&utm_campaign=javascript-word-processor-docker) platforms.
 
 ## Prerequisites	
 
@@ -16,7 +16,7 @@ Have [`Docker`](https://www.docker.com/products/container-runtime#/download) ins
 
 * On macOS, install [`Docker for Mac`](https://hub.docker.com/editions/community/docker-ce-desktop-windows).
 
-## How to use this Word Processor Docker image
+## How to use this DOCX Editor Docker image
 
 **Step 1:** Pull the word-processor-server image from Docker Hub.
 
@@ -39,7 +39,7 @@ services:
     - "6002:80"
 ``` 
 
-**Note:** Word Processor is a commercial product. It requires a valid [license key](https://help.syncfusion.com/common/essential-studio/licensing/licensing-faq/where-can-i-get-a-license-key?utm_source=docker&utm_medium=listing&utm_campaign=javascript-word-processor-docker) to use it in a production environment. Please replace `LICENSE_KEY` with the valid license key in the `docker-compose.yml` file.
+**Note:** DOCX Editor is a commercial product. It requires a valid [license key](https://help.syncfusion.com/common/essential-studio/licensing/licensing-faq/where-can-i-get-a-license-key?utm_source=docker&utm_medium=listing&utm_campaign=javascript-word-processor-docker) to use it in a production environment. Please replace `LICENSE_KEY` with the valid license key in the `docker-compose.yml` file.
 
 **Step 3:** In a terminal tab, navigate to the directory where you've placed the docker-compose.yml file and execute the following.
 
@@ -47,9 +47,9 @@ services:
 docker-compose up 
 ```
 
-Now the Word Processor server Docker instance runs in the localhost with the provided port number `http://localhost:6002`. Open this link in a browser and navigate to the Word Processor Web API `http://localhost:6002/api/documenteditor`. It returns the default get method response. 
+Now the DOCX Editor server Docker instance runs in the localhost with the provided port number `http://localhost:6002`. Open this link in a browser and navigate to the DOCX Editor Web API `http://localhost:6002/api/documenteditor`. It returns the default get method response. 
 
-**Step 4:** Append the Docker instance running the URL `(http://localhost:6002/api/documenteditor)` to the service URL in the client-side Word Processor control. For more information about how to get started with the Word Processor control, refer to this [`getting started page.`](https://ej2.syncfusion.com/javascript/documentation/document-editor/getting-started?utm_source=docker&utm_medium=listing&utm_campaign=javascript-word-processor-docker)
+**Step 4:** Append the Docker instance running the URL `(http://localhost:6002/api/documenteditor)` to the service URL in the client-side DOCX Editor control. For more information about how to get started with the DOCX Editor control, refer to this [`getting started page.`](https://ej2.syncfusion.com/javascript/documentation/document-editor/getting-started?utm_source=docker&utm_medium=listing&utm_campaign=javascript-word-processor-docker)
 
 ```html
 <!DOCTYPE html>
@@ -113,7 +113,7 @@ The local directory `./data` means the directory `data` present in the same pare
 
 ![The directory containing the 'docker-compose.yml' file and 'data' folder](https://github.com/SyncfusionExamples/Word-Processor-Server-Docker/blob/master/docker-compose-file-directory.png)
 
-Few resource files are included in the default resource directory `/app/Data` of the Word Processor Docker container. You can find those default resource files from [GitHub](https://github.com/SyncfusionExamples/Word-Processor-Server-Docker/tree/master/src/ej2-documenteditor-server/Data). You can configure a new directory with your own resource files (required spell check dictionaries, and template documents) based on your needs.
+Few resource files are included in the default resource directory `/app/Data` of the DOCX Editor Docker container. You can find those default resource files from [GitHub](https://github.com/SyncfusionExamples/Word-Processor-Server-Docker/tree/master/src/ej2-documenteditor-server/Data). You can configure a new directory with your own resource files (required spell check dictionaries, and template documents) based on your needs.
 
 If you customize the default resource directory (change in casing, name or directory level), then you must set the modified directory path (assuming `/app/` as home directory) to environment variable `SPELLCHECK_DICTIONARY_PATH` like below.
 ```yaml
@@ -176,4 +176,4 @@ services:
     - "6002:80"
 ```
 
-Kindly refer these getting started pages to create a Word Processor in [`Angular`](https://ej2.syncfusion.com/angular/documentation/document-editor/getting-started/?utm_source=docker&utm_medium=listing&utm_campaign=javascript-word-processor-docker), [`React`](https://ej2.syncfusion.com/react/documentation/document-editor/getting-started/?utm_source=docker&utm_medium=listing&utm_campaign=javascript-word-processor-docker), [`Vue`](https://ej2.syncfusion.com/vue/documentation/document-editor/getting-started/?utm_source=docker&utm_medium=listing&utm_campaign=javascript-word-processor-docker), [`ASP.NET MVC`](https://ej2.syncfusion.com/aspnetmvc/documentation/document-editor/getting-started/?utm_source=docker&utm_medium=listing&utm_campaign=javascript-word-processor-docker), [`ASP.NET Core`](https://ej2.syncfusion.com/aspnetcore/documentation/document-editor/getting-started/?utm_source=docker&utm_medium=listing&utm_campaign=javascript-word-processor-docker), and [`Blazor`](https://blazor.syncfusion.com/documentation/document-editor/getting-started/server-side-application/?utm_source=docker&utm_medium=listing&utm_campaign=javascript-word-processor-docker).
+Kindly refer these getting started pages to create a DOCX Editor in [`Angular`](https://ej2.syncfusion.com/angular/documentation/document-editor/getting-started/?utm_source=docker&utm_medium=listing&utm_campaign=javascript-word-processor-docker), [`React`](https://ej2.syncfusion.com/react/documentation/document-editor/getting-started/?utm_source=docker&utm_medium=listing&utm_campaign=javascript-word-processor-docker), [`Vue`](https://ej2.syncfusion.com/vue/documentation/document-editor/getting-started/?utm_source=docker&utm_medium=listing&utm_campaign=javascript-word-processor-docker), [`ASP.NET MVC`](https://ej2.syncfusion.com/aspnetmvc/documentation/document-editor/getting-started/?utm_source=docker&utm_medium=listing&utm_campaign=javascript-word-processor-docker), [`ASP.NET Core`](https://ej2.syncfusion.com/aspnetcore/documentation/document-editor/getting-started/?utm_source=docker&utm_medium=listing&utm_campaign=javascript-word-processor-docker), and [`Blazor`](https://blazor.syncfusion.com/documentation/document-editor/getting-started/server-side-application/?utm_source=docker&utm_medium=listing&utm_campaign=javascript-word-processor-docker).
