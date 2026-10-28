@@ -2,7 +2,7 @@
  
 The [DOCX Editor](https://www.syncfusion.com/docx-editor-sdk/react-docx-editor?utm_source=github&utm_medium=listing&utm_campaign=github-github-documenteditor-examples) (Document Editor) is a component with editing capabilities like Microsoft Word. It is used to create, edit, view, and print Word documents. It provides all the common word processing abilities, including editing text; formatting contents; resizing images and tables; finding and replacing text; importing, exporting, and printing Word documents; and using bookmarks and tables of contents. 
  
-This Docker project is the predefined Docker container for Syncfusion’s DOCX Editor backend functionalities. This server-side Web API project is targeting ASP.NET Core 6.0.
+This Docker project is the predefined Docker container for Syncfusion’s DOCX Editor backend functionalities. This server-side Web API project is targeting ASP.NET Core 10.0.
 
 If you want to add new functionality or customize any existing functionalities, then create your own Docker file by referencing this Docker project.
 
